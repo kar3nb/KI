@@ -1,3 +1,9 @@
+library("networkD3")
+
+my_color <- 'd3.scaleOrdinal().domain(["a", "b", "c", "d", "e", "f",
+"g"]) .range(["#4B0055", "#353E7C" , "#007094", "#009B95", "#00BE7D",
+"#96D84B", "#FDE333"])'
+
 fp1 <- sankeyNetwork(Links = p1_links, Nodes = p1_nodes, Source =
 "source", Target = "target", Value = "value", NodeID = "names",
 colourScale=my_color, LinkGroup="group", NodeGroup="group", sinksRight =
