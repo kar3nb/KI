@@ -1,0 +1,121 @@
+fp1 <- sankeyNetwork(Links = p1_links, Nodes = p1_nodes, Source =
+"source", Target = "target", Value = "value", NodeID = "names",
+colourScale=my_color, LinkGroup="group", NodeGroup="group", sinksRight =
+FALSE,fontFamily = 'times new roman',fontSize = 18, nodeWidth = 10,
+nodePadding = 40, width = 1500, margin = list(right = 1), iterations =
+50)
+
+#column headings -
+<https://stackoverflow.com/questions/66813278/how-to-add-columnn-titles-in-a-sankey-chart-networkd3>
+
+fp1_c <-   htmlwidgets::onRender(fp1, '
+function(el) { 
+    var cols_x = this.sankey.nodes().map(d => d.x).filter((v, i, a) => a.indexOf(v) === i).sort(function(a, b){return a - b});
+    var labels = ["3 months before", "MSSA presentation", "3 months after"];
+    cols_x.forEach((d, i) => {
+      d3.select(el).select("svg")
+        .append("text")
+        .attr("x", d)
+        .attr("y", 12)
+        .text(labels[i]);
+ })
+  }
+')
+
+fp1_c
+
+#change position of node labels -
+<https://stackoverflow.com/questions/52168416/customize-sankey-diagram-in-r/52174311#52174311?newreg=acb4c0a53a614832a9b13cf3365fc325>
+
+fp1_n1 <- htmlwidgets::onRender(fp1_c, ' 
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "some clinical contact (59%)"; }) 
+.attr("x", x.options.nodeWidth - 16)
+.attr("text-anchor", "end"); 
+} 
+' 
+)
+
+fp1_n1
+
+fp1_n2 <- htmlwidgets::onRender(fp1_n1, ' 
+function(el,x) {
+d3.select(el) 
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "no clinical contact (37%)"; }) 
+.attr("x",x.options.nodeWidth - 16) 
+.attr("text-anchor", "end"); 
+} 
+' 
+)
+
+fp1_n2
+
+fp1_n3 <- htmlwidgets::onRender(fp1_n2, ' 
+function(el,x) {
+d3.select(el) 
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "on medication only (4%)"; }) 
+.attr("x", x.options.nodeWidth -16) 
+.attr("text-anchor", "end"); 
+} 
+' 
+)
+
+fp1_n3
+
+fp1_n4 <- htmlwidgets::onRender(fp1_n3, '
+function(el,x) {
+d3.select(el) 
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "admitted to hospital (9%)"; }) 
+.attr("x",x.options.nodeWidth - 85) 
+.attr("text-anchor", "start"); 
+} 
+' 
+)
+
+fp1_n4
+
+fp1_n5 <- htmlwidgets::onRender(fp1_n4, '
+function(el,x) {
+d3.select(el) 
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "secondary care visit (76%)"; }) 
+.attr("x", x.options.nodeWidth - 85) 
+.attr("text-anchor", "start"); 
+}
+' 
+)
+
+fp1_n5
+
+fp1_n6 <- htmlwidgets::onRender(fp1_n5, '
+function(el,x) {
+d3.select(el) 
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "primary care visit (15%)"; }) 
+.attr("x", x.options.nodeWidth - 85) 
+.attr("text-anchor", "start"); 
+} 
+' 
+)
+
+fp1_n6
+
+flowchart_1 <- fp1_n6
+
+flowchart_1
+
+#add line breaks -
+<https://stackoverflow.com/questions/44700596/put-line-break-in-node-labels-in-networkd3-sankey-diagram>
+\# doesnt seem to be any other way, but doesnt work
+
+fp1_b \<- onRender(fp1_n6, ' function(el,x) { d3.selectAll(".node
+text").remove() d3.selectAll(".node") .append("foreignObject")
+.attr("width", 100) .attr("height", 75) .html(function(d) { return
+d.name; }) } ' )
+
+fp1_b
