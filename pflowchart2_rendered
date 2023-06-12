@@ -10,3 +10,82 @@ colourScale=my_color, LinkGroup="group", NodeGroup="group", sinksRight =
 FALSE,fontFamily = 'times new roman',fontSize = 18, nodeWidth = 10,
 nodePadding = 40, width = 1500, iterations = 50)
 
+fp2_c <- htmlwidgets::onRender(fp2, '
+function(el) {
+var cols_x = this.sankey.nodes().map(d => d.x).filter((v, i, a) => a.indexOf(v) === i).sort(function(a, b){return a - b}); 
+var labels = ["1st MSSA presentation", "Subsequent MSSA event", "Outcome"]; 
+cols_x.forEach((d, i) => {
+d3.select(el).select("svg")
+        .append("text")
+        .attr("x", d)
+        .attr("y", 12)
+        .text(labels[i]);
+ })
+  }
+')
+
+fp2_c
+
+#change position of node labels
+
+fp2_n1 <- htmlwidgets::onRender(fp2_c, '
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "survived or death by other cause (99%)"; }) 
+.attr("x", x.options.nodeWidth - 16) 
+.attr("text-anchor", "end"); } ' )
+
+fp2_n1
+
+fp2_n2 <- htmlwidgets::onRender(fp2_n1, '
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "death by suicide (1%)"; }) 
+.attr("x", x.options.nodeWidth - 16)
+.attr("text-anchor", "end"); } ' )
+
+fp2_n2
+
+fp2_n3 <- htmlwidgets::onRender(fp2_n2, '
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "outpatient appointment (29%)"; }) 
+.attr("x", x.options.nodeWidth - 100)
+.attr("text-anchor", "start"); } ' )
+
+fp2_n3
+
+fp2_n4 <- htmlwidgets::onRender(fp2_n3, '
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "hospital admission n=1 (8%)"; }) 
+.attr("x", x.options.nodeWidth - 100)
+.attr("text-anchor", "start"); } ' )
+
+fp2_n4
+
+fp2_n5 <- htmlwidgets::onRender(fp2_n4, ' 
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "no clinical contact (56%)"; }) 
+.attr("x", x.options.nodeWidth - 90)
+.attr("text-anchor", "start"); } ' )
+
+fp2_n5
+
+fp2_n6 <- htmlwidgets::onRender(fp2_n5, '
+function(el,x) { 
+d3.select(el)
+.selectAll(".node text") 
+.filter(function(d) { return d.name == "hospital admission n>1 (7%)"; }) 
+.attr("x", x.options.nodeWidth - 100)
+.attr("text-anchor", "start"); } ' )
+
+fp2_n6
+
+flowchart_2 <- fp2_n6
